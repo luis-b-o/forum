@@ -4,7 +4,6 @@ import br.com.alura.forum.model.Course
 import br.com.alura.forum.model.Topic
 import br.com.alura.forum.model.User
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class TopicService(private var topics: List<Topic>) {
@@ -56,7 +55,7 @@ class TopicService(private var topics: List<Topic>) {
             ),
         )
 
-        topics = Arrays.asList(topic1, topic2, topic3)
+        topics = listOf(topic1, topic2, topic3)
     }
 
     fun list(): List<Topic> {
