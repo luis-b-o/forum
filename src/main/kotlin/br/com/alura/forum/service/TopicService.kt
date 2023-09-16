@@ -1,6 +1,7 @@
 package br.com.alura.forum.service
 
-import br.com.alura.forum.dto.NewTopicDTO
+import br.com.alura.forum.dto.NewTopicForm
+import br.com.alura.forum.dto.TopicView
 import br.com.alura.forum.model.Topic
 import org.springframework.stereotype.Service
 
@@ -11,15 +12,30 @@ class TopicService(
     private var userService: UserService
 ) {
 
-    fun list(): List<Topic> {
-        return topics
+    fun list(): List<TopicView> {
+        return topics.stream().map { t ->
+            TopicView(
+                id = t.id as Long,
+                title = t.title,
+                message = t.message,
+                status = t.status,
+                creationDate = t.creationDate,
+            )
+        }.toList()
     }
 
-    fun getById(id: Long): Topic {
-        return topics.stream().filter { t -> t.id == id }.findFirst().get()
+    fun getById(id: Long): TopicView {
+        val topic = topics.stream().filter { t -> t.id == id }.findFirst().get()
+        return TopicView(
+            id = topic.id as Long,
+            title = topic.title,
+            message = topic.message,
+            status = topic.status,
+            creationDate = topic.creationDate,
+        )
     }
 
-    fun register(topic: NewTopicDTO) {
+    fun register(topic: NewTopicForm) {
         topics = topics.plus(
             Topic(
                 id = topics.size.toLong() + 1,

@@ -1,7 +1,7 @@
 package br.com.alura.forum.controller
 
-import br.com.alura.forum.dto.NewTopicDTO
-import br.com.alura.forum.model.Topic
+import br.com.alura.forum.dto.NewTopicForm
+import br.com.alura.forum.dto.TopicView
 import br.com.alura.forum.service.TopicService
 import org.springframework.web.bind.annotation.*
 
@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.*
 class TopicController(private val service: TopicService) {
 
     @GetMapping
-    fun list(): List<Topic> {
+    fun list(): List<TopicView> {
         return service.list()
     }
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Long): Topic {
+    fun getById(@PathVariable id: Long): TopicView {
         return service.getById(id)
     }
 
     @PostMapping
-    fun register(@RequestBody topic: NewTopicDTO) {
+    fun register(@RequestBody topic: NewTopicForm) {
         service.register(topic)
     }
 
