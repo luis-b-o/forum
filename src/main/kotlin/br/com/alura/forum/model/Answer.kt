@@ -1,12 +1,13 @@
 package br.com.alura.forum.model
 
+import br.com.alura.forum.dto.TopicView
 import java.time.LocalDateTime
 
 data class Answer(
-    val id: Long? = null,
-    val message: String = "",
+    var id: Long? = null,
+    val message: String,
     val creationDate: LocalDateTime = LocalDateTime.now(),
     val author: User,
-    val topic: Topic,
+    var topic: TopicView? = null,
     val solution: Boolean = false
 )
