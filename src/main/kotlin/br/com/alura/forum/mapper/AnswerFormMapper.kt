@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component
 class AnswerFormMapper(
     private val userService: UserService,
 ) : Mapper<NewAnswerForm, Answer> {
-    override fun map(a: NewAnswerForm): Answer {
+    override fun map(t: NewAnswerForm): Answer {
         return Answer(
-            message = a.message,
-            author = userService.getById(a.authorId),
+            message = t.message,
+            author = userService.getById(t.authorId),
         )
     }
 }
