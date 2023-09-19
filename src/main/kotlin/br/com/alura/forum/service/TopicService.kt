@@ -27,30 +27,35 @@ class TopicService(
         return TopicViewMapper().map(topic)
     }
 
-    fun register(form: NewTopicForm) {
+    fun register(form: NewTopicForm): TopicView {
         val topic = topicFormMapper.map(form)
         topic.id = topics.size.toLong() + 1
         topics = topics.plus(topic)
+        return topicViewMapper.map(topic)
     }
 
-    fun update(topic: UpdateTopicForm) {
+    fun update(topic: UpdateTopicForm): TopicView {
         val topicToUpdate = topics
             .stream()
             .filter { t -> t.id == topic.id }
             .findFirst().get()
 
-        topics = topics.minus(topicToUpdate).plus(
-            Topic(
-                id = topic.id,
-                title = topic.title,
-                message = topic.message,
-                course = topicToUpdate.course,
-                author = topicToUpdate.author,
-                status = topicToUpdate.status,
-                answers = topicToUpdate.answers,
-                creationDate = topicToUpdate.creationDate
-            )
+        val updatedTopic = Topic(
+            id = topic.id,
+            title = topic.title,
+            message = topic.message,
+            course = topicToUpdate.course,
+            author = topicToUpdate.author,
+            status = topicToUpdate.status,
+            answers = topicToUpdate.answers,
+            creationDate = topicToUpdate.creationDate
         )
+
+        topics = topics.minus(topicToUpdate).plus(
+            updatedTopic
+        )
+
+        return topicViewMapper.map(updatedTopic)
     }
 
     fun delete(id: Long) {
