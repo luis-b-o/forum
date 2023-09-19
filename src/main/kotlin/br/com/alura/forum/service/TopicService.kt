@@ -2,6 +2,7 @@ package br.com.alura.forum.service
 
 import br.com.alura.forum.dto.NewTopicForm
 import br.com.alura.forum.dto.TopicView
+import br.com.alura.forum.dto.UpdateTopicForm
 import br.com.alura.forum.mapper.TopicFormMapper
 import br.com.alura.forum.mapper.TopicViewMapper
 import br.com.alura.forum.model.Topic
@@ -13,6 +14,7 @@ class TopicService(
     private val topicViewMapper: TopicViewMapper,
     private val topicFormMapper: TopicFormMapper,
 ) {
+
 
     fun list(): List<TopicView> {
         return topics.stream().map { t ->
@@ -29,6 +31,26 @@ class TopicService(
         val topic = topicFormMapper.map(form)
         topic.id = topics.size.toLong() + 1
         topics = topics.plus(topic)
+    }
+
+    fun update(topic: UpdateTopicForm) {
+        val topicToUpdate = topics
+            .stream()
+            .filter { t -> t.id == topic.id }
+            .findFirst().get()
+
+        topics = topics.minus(topicToUpdate).plus(
+            Topic(
+                id = topic.id,
+                title = topic.title,
+                message = topic.message,
+                course = topicToUpdate.course,
+                author = topicToUpdate.author,
+                status = topicToUpdate.status,
+                answers = topicToUpdate.answers,
+                creationDate = topicToUpdate.creationDate
+            )
+        )
     }
 
 }
