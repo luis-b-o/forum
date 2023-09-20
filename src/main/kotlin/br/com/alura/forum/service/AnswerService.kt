@@ -2,6 +2,7 @@ package br.com.alura.forum.service
 
 import br.com.alura.forum.dto.AnswerView
 import br.com.alura.forum.dto.NewAnswerForm
+import br.com.alura.forum.dto.UpdateAnswerForm
 import br.com.alura.forum.mapper.AnswerFormMapper
 import br.com.alura.forum.mapper.AnswerViewMapper
 import br.com.alura.forum.model.Answer
@@ -29,6 +30,32 @@ class AnswerService(
         answers = answers.plus(answer)
 
         return AnswerViewMapper().map(answer)
+    }
+
+    fun update(answer: UpdateAnswerForm): AnswerView {
+
+        val answerToUpdate = answers.stream().findFirst().get()
+
+        val updatedAnswer = Answer(
+            id = answerToUpdate.id,
+            message = answer.message,
+            author = answerToUpdate.author,
+            topic = answerToUpdate.topic,
+            solution = answerToUpdate.solution
+        )
+
+        answers = answers.minus(answerToUpdate).plus(updatedAnswer)
+
+        return AnswerViewMapper().map(updatedAnswer)
+
+    }
+
+    fun delete(id: Long) {
+
+        val answerToDelete = answers.stream().findFirst().get()
+
+        answers = answers.minus(answerToDelete)
+
     }
 
 }
