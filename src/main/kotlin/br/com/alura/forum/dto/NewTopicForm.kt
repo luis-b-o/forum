@@ -6,10 +6,10 @@ import jakarta.validation.constraints.Size
 
 data class NewTopicForm(
     @field:NotEmpty
-    @field:Size(min = 5, max = 100)
+    @field:Size(min = 5, max = 100, message = "Title must be between 5 and 100 characters")
     val title: String,
 
-    @field:NotEmpty
+    @field:NotEmpty(message = "Message cannot be empty")
     val message: String,
 
     @field:NotNull
