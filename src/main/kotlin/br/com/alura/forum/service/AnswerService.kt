@@ -3,6 +3,7 @@ package br.com.alura.forum.service
 import br.com.alura.forum.dto.AnswerView
 import br.com.alura.forum.dto.NewAnswerForm
 import br.com.alura.forum.dto.UpdateAnswerForm
+import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.AnswerFormMapper
 import br.com.alura.forum.mapper.AnswerViewMapper
 import br.com.alura.forum.model.Answer
@@ -14,6 +15,7 @@ class AnswerService(
     private var answers: List<Answer>,
     private val answerFormMapper: AnswerFormMapper,
     private val topicService: TopicService,
+    private val notFoundMessage: String = "Topic not found"
 ) {
 
     fun list(topicId: Long): List<Answer> {
@@ -34,7 +36,10 @@ class AnswerService(
 
     fun update(answer: UpdateAnswerForm): AnswerView {
 
-        val answerToUpdate = answers.stream().findFirst().get()
+        val answerToUpdate = answers
+            .stream()
+            .findFirst()
+            .orElseThrow { NotFoundException(notFoundMessage) }
 
         val updatedAnswer = Answer(
             id = answerToUpdate.id,
@@ -52,7 +57,10 @@ class AnswerService(
 
     fun delete(id: Long) {
 
-        val answerToDelete = answers.stream().findFirst().get()
+        val answerToDelete = answers
+            .stream()
+            .findFirst()
+            .orElseThrow { NotFoundException(notFoundMessage) }
 
         answers = answers.minus(answerToDelete)
 
