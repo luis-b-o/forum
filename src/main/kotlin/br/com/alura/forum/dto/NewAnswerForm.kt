@@ -11,6 +11,9 @@ data class NewAnswerForm(
     val message: String,
 
     @field:NotNull
-    val authorId: Long
+    val authorId: Long,
+
+    @field:NotNull
+    val topicId: Long
 
 )
