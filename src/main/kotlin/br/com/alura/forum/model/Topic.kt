@@ -9,6 +9,8 @@ data class Topic(
     val id: Long? = null,
     var title: String,
     var message: String,
+
+    @Column(name = "created_at", updatable = false)
     val creationDate: LocalDateTime = LocalDateTime.now(),
 
     @ManyToOne

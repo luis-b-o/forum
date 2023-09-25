@@ -8,6 +8,7 @@ data class Answer(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
     var message: String,
+    @Column(name = "created_at", updatable = false)
     val creationDate: LocalDateTime = LocalDateTime.now(),
     @ManyToOne
     val author: User,
