@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component
 @Component
 class AnswerViewMapper : Mapper<Answer, AnswerView> {
 
-    override fun map(a: Answer): AnswerView {
+    override fun map(t: Answer): AnswerView {
         return AnswerView(
-            id = a.id as Long,
-            message = a.message,
+            id = t.id as Long,
+            message = t.message,
         )
     }
 }

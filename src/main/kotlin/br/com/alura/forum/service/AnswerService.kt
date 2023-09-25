@@ -6,63 +6,46 @@ import br.com.alura.forum.dto.UpdateAnswerForm
 import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.AnswerFormMapper
 import br.com.alura.forum.mapper.AnswerViewMapper
-import br.com.alura.forum.model.Answer
+import br.com.alura.forum.repository.AnswerRepository
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors
 
 @Service
 class AnswerService(
-    private var answers: List<Answer>,
+    private val answerRepository: AnswerRepository,
     private val answerFormMapper: AnswerFormMapper,
-    private val topicService: TopicService,
     private val notFoundMessage: String = "Topic not found"
 ) {
 
-    fun list(topicId: Long): List<Answer> {
-        return answers
-            .stream()
-            .filter { a -> a.topic?.id == topicId }
-            .collect(Collectors.toList())
+    fun list(topicId: Long): List<AnswerView> {
+        val answers = answerRepository.findAllByTopicId(topicId)
+
+        return answers.stream().map { t ->
+            AnswerViewMapper().map(t)
+        }.toList()
     }
 
-    fun register(form: NewAnswerForm, topicId: Long): AnswerView {
-        val answer = answerFormMapper.map(form)
-        answer.id = answers.size.toLong() + 1
-        answer.topic = topicService.getById(topicId)
-        answers = answers.plus(answer)
+    fun register(form: NewAnswerForm): AnswerView {
+        val answer = answerRepository.save(answerFormMapper.map(form))
 
         return AnswerViewMapper().map(answer)
     }
 
-    fun update(answer: UpdateAnswerForm): AnswerView {
+    fun update(form: UpdateAnswerForm): AnswerView {
 
-        val answerToUpdate = answers
-            .stream()
-            .findFirst()
+        val answer = answerRepository.findById(form.answerId)
             .orElseThrow { NotFoundException(notFoundMessage) }
 
-        val updatedAnswer = Answer(
-            id = answerToUpdate.id,
-            message = answer.message,
-            author = answerToUpdate.author,
-            topic = answerToUpdate.topic,
-            solution = answerToUpdate.solution
-        )
+        answer.message = form.message
 
-        answers = answers.minus(answerToUpdate).plus(updatedAnswer)
+        answerRepository.save(answer)
 
-        return AnswerViewMapper().map(updatedAnswer)
+        return AnswerViewMapper().map(answer)
 
     }
 
     fun delete(id: Long) {
 
-        val answerToDelete = answers
-            .stream()
-            .findFirst()
-            .orElseThrow { NotFoundException(notFoundMessage) }
-
-        answers = answers.minus(answerToDelete)
+        answerRepository.deleteById(id)
 
     }
 

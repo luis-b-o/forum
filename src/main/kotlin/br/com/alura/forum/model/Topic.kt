@@ -6,9 +6,9 @@ import java.time.LocalDateTime
 @Entity
 data class Topic(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
-    val title: String,
-    val message: String,
+    val id: Long? = null,
+    var title: String,
+    var message: String,
     val creationDate: LocalDateTime = LocalDateTime.now(),
 
     @ManyToOne

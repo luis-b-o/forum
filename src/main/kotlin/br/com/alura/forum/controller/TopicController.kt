@@ -7,6 +7,7 @@ import br.com.alura.forum.service.TopicService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 
@@ -25,6 +26,7 @@ class TopicController(private val service: TopicService) {
     }
 
     @PostMapping
+    @Transactional
     fun register(
         @RequestBody @Valid topic: NewTopicForm,
         uriBuilder: UriComponentsBuilder
@@ -35,6 +37,7 @@ class TopicController(private val service: TopicService) {
     }
 
     @PutMapping()
+    @Transactional
     fun update(
         @RequestBody @Valid topic: UpdateTopicForm,
     ): ResponseEntity<TopicView> {
@@ -44,6 +47,7 @@ class TopicController(private val service: TopicService) {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) {
         service.delete(id)

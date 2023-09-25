@@ -14,6 +14,6 @@ data class NewAnswerForm(
     val authorId: Long,
 
     @field:NotNull
-    val topicId: Long
+    var topicId: Long
 
 )

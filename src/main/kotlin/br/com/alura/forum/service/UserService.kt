@@ -1,24 +1,18 @@
 package br.com.alura.forum.service
 
+import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.model.User
+import br.com.alura.forum.repository.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
 class UserService(
-    var users: List<User>
+    private val repository: UserRepository,
+    private val notFoundMessage: String = "User not found"
 ) {
 
-    init {
-        val user = User(
-            id = 1,
-            name = "John",
-            email = "john.doe@gmail.com"
-        )
-        users = listOf(user)
-        
-    }
-
     fun getById(id: Long): User {
-        return users.stream().filter { u -> u.id == id }.findFirst().get()
+        // create a mapper for it
+        return repository.findById(id).orElseThrow { NotFoundException(notFoundMessage) }
     }
 }
